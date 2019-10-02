@@ -1,13 +1,8 @@
-import java.awt.*;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 
@@ -17,8 +12,8 @@ public class ContactsManager {
         ArrayList<String> lines = new ArrayList<>(); // Create lines List
 //        titleMenu(lines);
 //        readList("src/contacts.txt", lines);
-        addContact(lines);
-
+        addContact("src/contacts.txt", lines);
+//        System.out.println(lines);
     }
 
     //=============================== TITLE MENU ===============================//
@@ -43,7 +38,7 @@ public class ContactsManager {
 //            readList("src/contacts.txt", lines);
 
         } else if (option.equalsIgnoreCase("2")) {
-            addContact(lines);
+            addContact("src/contacts.txt", lines);
         } else if (option.equalsIgnoreCase("3")) {
             searchForContact();
         } else if (option.equalsIgnoreCase("4")) {
@@ -83,20 +78,34 @@ public class ContactsManager {
     }
 
 
-    public static ArrayList<String> addContact(ArrayList<String> line) {
+    public static ArrayList<String> addContact(String contactPath, ArrayList<String> lines) {
 //        System.out.println(line);
         Scanner scan = new Scanner(System.in);
-        System.out.println("What is your name?");
-        String newContactName = scan.nextLine();
-        System.out.println("What is your phone number?");
-        String newContactNumber = scan.nextLine();
-        Contact newContact = new Contact(newContactName,newContactNumber);
-        System.out.println(newContact.getAll());
+
+        Path contacts = Paths.get(contactPath);
+//        List<String> lines = new ArrayList<>();
+        try {
+            lines = (ArrayList<String>) Files.readAllLines(contacts);
+
+            System.out.println("What is your name?");
+            String newContactName = scan.nextLine();
+            System.out.println("What is your phone number?");
+            String newContactNumber = scan.nextLine();
+            Contact newContact = new Contact(newContactName,newContactNumber);
+//        System.out.println(newContact.getAll());
+            System.out.println("Original list " + lines);
+            lines.add(newContact.getName() + " | " + newContact.getPhoneNumber());
+            System.out.println("New list " + lines);
+        } catch (IOException e ) {
+            e.printStackTrace();
+        }
+
+
 
 
 //        OOPPractice newPerson = new OOPPractice(userFirstName, userLastName,userNickName, userFavColor, userAge);
 //        PersonArrayList.add(newPerson);
-        return line;
+        return lines;
     }
 
     public static void searchForContact() {
