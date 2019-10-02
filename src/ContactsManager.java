@@ -1,6 +1,6 @@
-package fileIO;
 import java.awt.*;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,16 +14,20 @@ import java.util.Scanner;
 public class ContactsManager {
 
     public static void main(String[] args) {
-        titleMenu();
-        readList("src/contacts.txt");
+        ArrayList<String> lines = new ArrayList<>(); // Create lines List
+//        titleMenu(lines);
+//        readList("src/contacts.txt", lines);
+        addContact(lines);
 
     }
 
     //=============================== TITLE MENU ===============================//
-    public static void titleMenu() {
+    @SuppressWarnings("all")
+    public static void titleMenu(ArrayList<String> lines) {
+
         Scanner scan = new Scanner(System.in);
         System.out.println("1. View contacts");
-        System.out.println("2. Add new ocntact");
+        System.out.println("2. Add new contact");
         System.out.println("3. Search a contact by name");
         System.out.println("4. Delete an existing contact");
         System.out.println("5. Exit");
@@ -34,38 +38,64 @@ public class ContactsManager {
 
         String option = scan.nextLine();
         if (option.equalsIgnoreCase("1")) {
-            readList("src/contacts.txt\n");
-        } else if (option.equalsIgnoreCase(2)) {
-            addContact();
+
+            readList("src/contacts.txt", lines);
+//            readList("src/contacts.txt", lines);
+
+        } else if (option.equalsIgnoreCase("2")) {
+            addContact(lines);
         } else if (option.equalsIgnoreCase("3")) {
             searchForContact();
-        } else if (option)
+        } else if (option.equalsIgnoreCase("4")) {
+
+        }
+
+        System.out.println("Would you like to continue? [ yes | no ]");
+        String userAnswer = scan.nextLine();
+        if (userAnswer.equalsIgnoreCase("yes") || userAnswer.equalsIgnoreCase("y")){
+            titleMenu(lines);
+        }else{
+            System.out.println("Have a good day!");
+        }
     }
 
 
     //  Collects name and contact information from contacts.txt
-    public static List<String> readList(String contactPath) {
+    public static ArrayList<String> readList(String contactPath, ArrayList<String> lines ) {
         Path contacts = Paths.get(contactPath);
-        List<String> lines = new ArrayList<>();
+//        List<String> lines = new ArrayList<>();
         try {
-            lines = Files.readAllLines(contacts);
+            lines = (ArrayList<String>) Files.readAllLines(contacts);
         } catch (IOException e ) {
-        e.printStackTrace();
+            e.printStackTrace();
         }
-            System.out.println("Name    | Phone number");
-            System.out.println("-----------------------");
+        System.out.println("Name    | Phone number");
+        System.out.println("-----------------------");
 
         for (String contact : lines) {
             System.out.println(contact);
+
         }
-        addContact((ArrayList<String>) lines);       // Casting ArrayList to addContact method.         <--- might not need this comment.
+        System.out.println(" ");
+//        addContact((ArrayList<String>) lines);       // Casting ArrayList to addContact method.         <--- might not need this comment.
         return lines;
 
     }
 
 
     public static ArrayList<String> addContact(ArrayList<String> line) {
-        System.out.println(line);
+//        System.out.println(line);
+        Scanner scan = new Scanner(System.in);
+        System.out.println("What is your name?");
+        String newContactName = scan.nextLine();
+        System.out.println("What is your phone number?");
+        String newContactNumber = scan.nextLine();
+        Contact newContact = new Contact(newContactName,newContactNumber);
+        System.out.println(newContact.getAll());
+
+
+//        OOPPractice newPerson = new OOPPractice(userFirstName, userLastName,userNickName, userFavColor, userAge);
+//        PersonArrayList.add(newPerson);
         return line;
     }
 
