@@ -10,9 +10,9 @@ public class ContactsManager {
 
     public static void main(String[] args) {
         ArrayList<String> lines = new ArrayList<>(); // Create lines List
-//        titleMenu(lines);
+        titleMenu(lines);
 //        readList("src/contacts.txt", lines);
-        addContact("src/contacts.txt", lines);
+//        addContact("src/contacts.txt", lines);
 //        System.out.println(lines);
     }
 
@@ -36,22 +36,24 @@ public class ContactsManager {
 
             readList("src/contacts.txt", lines);
 //            readList("src/contacts.txt", lines);
+            continueApp(lines); // Ask user if they want to continue
+
 
         } else if (option.equalsIgnoreCase("2")) {
             addContact("src/contacts.txt", lines);
+            continueApp(lines); // Ask user if they want to continue
         } else if (option.equalsIgnoreCase("3")) {
             searchForContact();
+            continueApp(lines); // Ask user if they want to continue
         } else if (option.equalsIgnoreCase("4")) {
 
-        }
+            continueApp(lines); // Ask user if they want to continue
 
-        System.out.println("Would you like to continue? [ yes | no ]");
-        String userAnswer = scan.nextLine();
-        if (userAnswer.equalsIgnoreCase("yes") || userAnswer.equalsIgnoreCase("y")){
-            titleMenu(lines);
         }else{
-            System.out.println("Have a good day!");
-        }
+            System.out.println("Good bye");
+        };
+
+
     }
 
 
@@ -93,18 +95,22 @@ public class ContactsManager {
             String newContactNumber = scan.nextLine();
             Contact newContact = new Contact(newContactName,newContactNumber);
 //        System.out.println(newContact.getAll());
-            System.out.println("Original list " + lines);
+//            System.out.println("Original list " + lines);
             lines.add(newContact.getName() + " | " + newContact.getPhoneNumber());
-            System.out.println("New list " + lines);
+//            System.out.println("New list " + lines);
+
+//            Write array list to text file
+            Path filepath = Paths.get("src", "contacts.txt");
+            Files.write(filepath, lines);
+
+            readList("src/contacts.txt", lines);
+
+
         } catch (IOException e ) {
             e.printStackTrace();
         }
 
 
-
-
-//        OOPPractice newPerson = new OOPPractice(userFirstName, userLastName,userNickName, userFavColor, userAge);
-//        PersonArrayList.add(newPerson);
         return lines;
     }
 
@@ -121,7 +127,16 @@ public class ContactsManager {
 
     }
 
-
+    public static void continueApp(ArrayList<String> lines){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Would you like to continue? [ yes | no ]");
+        String userAnswer = scan.nextLine();
+        if (userAnswer.equalsIgnoreCase("yes") || userAnswer.equalsIgnoreCase("y")){
+            titleMenu(lines);
+        }else{
+            System.out.println("Have a good day!");
+        }
+    }
 
 
 
