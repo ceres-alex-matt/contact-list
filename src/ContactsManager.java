@@ -34,27 +34,30 @@ public class ContactsManager {
         System.out.println("  ");
 
         String option = scan.nextLine();
-        if (option.equalsIgnoreCase("1")) {
+        if (option.equalsIgnoreCase("1") || option.equalsIgnoreCase("2") ||
+                option.equalsIgnoreCase("3") || option.equalsIgnoreCase("4") ||
+                option.equalsIgnoreCase("5")) {
 
-            readList("src/contacts.txt", lines);
+            if (option.equalsIgnoreCase("1")) {
+                readList("src/contacts.txt", lines);
 //            readList("src/contacts.txt", lines);
-            continueApp(lines); // Ask user if they want to continue
-
-
-        } else if (option.equalsIgnoreCase("2")) {
-            addContact("src/contacts.txt", lines);
-            continueApp(lines); // Ask user if they want to continue
-        } else if (option.equalsIgnoreCase("3")) {
-            searchForContact(lines, "src/contacts.txt");
-            continueApp(lines); // Ask user if they want to continue
-        } else if (option.equalsIgnoreCase("4")) {
-            deleteContact(lines, "src/contacts.txt");
-            continueApp(lines); // Ask user if they want to continue
-
-        }else{
-            System.out.println("Good bye");
-        };
-
+                continueApp(lines); // Ask user if they want to continue
+            } else if (option.equalsIgnoreCase("2")) {
+                addContact("src/contacts.txt", lines);
+                continueApp(lines); // Ask user if they want to continue
+            } else if (option.equalsIgnoreCase("3")) {
+                searchForContact(lines, "src/contacts.txt");
+                continueApp(lines); // Ask user if they want to continue
+            } else if (option.equalsIgnoreCase("4")) {
+                deleteContact(lines, "src/contacts.txt");
+                continueApp(lines); // Ask user if they want to continue
+            } else if (option.equalsIgnoreCase("5")) {
+                System.out.println("Good bye");
+            };
+        } else {
+            System.out.println("That's not a number, Bub. It's either my way or the highway.");
+            continueApp(lines);
+        }
 
     }
 
@@ -84,35 +87,41 @@ public class ContactsManager {
     public static ArrayList<String> addContact(String contactPath, ArrayList<String> lines) {
 //        System.out.println(line);
         Scanner scan = new Scanner(System.in);
-
         Path contacts = Paths.get(contactPath);
 //        List<String> lines = new ArrayList<>();
         try {
             lines = (ArrayList<String>) Files.readAllLines(contacts);
-
             System.out.println("What is your name?");
             String newContactName = scan.nextLine();
             System.out.println("What is your phone number?");
             String newContactNumber = scan.nextLine();
-            Contact newContact = new Contact(newContactName,newContactNumber);
-//        System.out.println(newContact.getAll());
-//            System.out.println("Original list " + lines);
-            lines.add(newContact.getName() + " | " + newContact.getPhoneNumber());
-//            System.out.println("New list " + lines);
-
-//            Write array list to text file
-            Path filepath = Paths.get("src", "contacts.txt");
-            Files.write(filepath, lines);
-
-            readList("src/contacts.txt", lines);
-
-
+            if (isNum(newContactNumber)) {
+                Contact newContact = new Contact(newContactName,newContactNumber);
+    //        System.out.println(newContact.getAll());
+    //            System.out.println("Original list " + lines);
+                lines.add(newContact.getName() + " | " + newContact.getPhoneNumber());
+    //            System.out.println("New list " + lines);
+    //            Write array list to text file
+                Path filepath = Paths.get("src", "contacts.txt");
+                Files.write(filepath, lines);
+                readList("src/contacts.txt", lines);
+            } else {
+                System.out.println("That's not a number...");
+                addContact("src/contacts.txt", lines);
+            }
         } catch (IOException e ) {
             e.printStackTrace();
         }
-
-
         return lines;
+    }
+
+    public static boolean isNum (String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 //======================================== SEARCH FOR A CONTACT ========================================//
@@ -140,22 +149,27 @@ public class ContactsManager {
         Scanner scan = new Scanner(System.in);
         Path contacts = Paths.get(contactPath);
         try {
-
-            lines = (ArrayList<String>) Files.readAllLines(contacts);
+            int indexNum = 0;
+            lines = (ArrayList<String>) Files.readAllLines(contacts); // Putting the arrayLIst inside of contacts
             System.out.println("Who do you no longer like?");
             String oldContactName = scan.nextLine();
             for(String d : lines){
                 if(d.toLowerCase().contains(oldContactName.toLowerCase())) {
                     System.out.println(d);
-                    int indexNum = lines.indexOf(d);
-                    System.out.println("index num " + indexNum);
+                    indexNum = lines.indexOf(d);
+//                    System.out.println("index num " + indexNum);
 //                    System.out.println(lines.remove(d));
                 }
             }
+            System.out.println(lines);
+            lines.remove(indexNum);
+            System.out.println(lines);
 
-            // Updating contacts.txt file.
-//            Path filepath = Paths.get("src", "contacts.txt");
-//            Files.write(filepath, lines);
+
+
+//             Updating contacts.txt file.
+            Path filepath = Paths.get("src", "contacts.txt");
+            Files.write(filepath, lines);
 
             System.out.println(lines);
 
