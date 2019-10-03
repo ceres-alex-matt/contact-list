@@ -43,7 +43,7 @@ public class ContactsManager {
             addContact("src/contacts.txt", lines);
             continueApp(lines); // Ask user if they want to continue
         } else if (option.equalsIgnoreCase("3")) {
-            searchForContact();
+            searchForContact(lines);
             continueApp(lines); // Ask user if they want to continue
         } else if (option.equalsIgnoreCase("4")) {
 
@@ -114,7 +114,24 @@ public class ContactsManager {
         return lines;
     }
 
-    public static void searchForContact() {
+    public static void searchForContact(ArrayList<String> lines ) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter the name you would like to search: ");
+        String contactName = scan.nextLine();
+
+        System.out.println(lines);
+//        if (lines.indexOf(contactName) > 0){
+//            int nameIndex = lines.indexOf(contactName);
+//            lines.get(nameIndex);
+//
+//        }else {
+//            System.out.println("Name not found :/");
+//        }
+//        numbers.size(); // 3
+//        numbers.get(2); // 22
+//
+//        numbers.indexOf(20);    // 1
+//        numbers.indexOf("cat"); // -1
 
     }
 
@@ -133,7 +150,7 @@ public class ContactsManager {
         String userAnswer = scan.nextLine();
         if (userAnswer.equalsIgnoreCase("yes") || userAnswer.equalsIgnoreCase("y")){
             titleMenu(lines);
-        }else{
+        } else{
             System.out.println("Have a good day!");
         }
     }
