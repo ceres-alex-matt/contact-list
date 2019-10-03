@@ -48,7 +48,7 @@ public class ContactsManager {
             searchForContact(lines, "src/contacts.txt");
             continueApp(lines); // Ask user if they want to continue
         } else if (option.equalsIgnoreCase("4")) {
-
+            deleteContact(lines, "src/contacts.txt");
             continueApp(lines); // Ask user if they want to continue
 
         }else{
@@ -115,7 +115,7 @@ public class ContactsManager {
         return lines;
     }
 
-//======================================== SEARCH FOR A CONTACT ========================================
+//======================================== SEARCH FOR A CONTACT ========================================//
     public static void searchForContact(ArrayList<String> lines, String contactPath) {
         Path contacts = Paths.get(contactPath);
         try {
@@ -135,9 +135,33 @@ public class ContactsManager {
         }
     }
 
-
+    //======================================== DELETE A CONTACT ========================================//
     public static void deleteContact(ArrayList<String> lines, String contactPath) {
+        Scanner scan = new Scanner(System.in);
         Path contacts = Paths.get(contactPath);
+        try {
+
+            lines = (ArrayList<String>) Files.readAllLines(contacts);
+            System.out.println("Who do you no longer like?");
+            String oldContactName = scan.nextLine();
+            for(String d : lines){
+                if(d.toLowerCase().contains(oldContactName.toLowerCase())) {
+                    System.out.println(d);
+                    lines.remove(d);
+                }
+            }
+
+            // Updating contacts.txt file.
+            Path filepath = Paths.get("src", "contacts.txt");
+            Files.write(filepath, lines);
+
+            //  lines.add(newContact.getName() + " | " + newContact.getPhoneNumber());
+//            lines.remove(oldContactName + " | " + oldContact.getPhoneNumber())
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
 
     }
 
