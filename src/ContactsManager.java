@@ -1,3 +1,5 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,7 +45,7 @@ public class ContactsManager {
             addContact("src/contacts.txt", lines);
             continueApp(lines); // Ask user if they want to continue
         } else if (option.equalsIgnoreCase("3")) {
-            searchForContact(lines);
+            searchForContact(lines, "src/contacts.txt");
             continueApp(lines); // Ask user if they want to continue
         } else if (option.equalsIgnoreCase("4")) {
 
@@ -56,7 +58,7 @@ public class ContactsManager {
 
     }
 
-
+    //======================================== DISPLAY LIST OF CONTACTS ========================================
     //  Collects name and contact information from contacts.txt
     public static ArrayList<String> readList(String contactPath, ArrayList<String> lines ) {
         Path contacts = Paths.get(contactPath);
@@ -74,12 +76,11 @@ public class ContactsManager {
 
         }
         System.out.println(" ");
-//        addContact((ArrayList<String>) lines);       // Casting ArrayList to addContact method.         <--- might not need this comment.
         return lines;
 
     }
 
-
+    //======================================== ADD A CONTACT ========================================
     public static ArrayList<String> addContact(String contactPath, ArrayList<String> lines) {
 //        System.out.println(line);
         Scanner scan = new Scanner(System.in);
@@ -114,29 +115,29 @@ public class ContactsManager {
         return lines;
     }
 
-    public static void searchForContact(ArrayList<String> lines ) {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter the name you would like to search: ");
-        String contactName = scan.nextLine();
+//======================================== SEARCH FOR A CONTACT ========================================
+    public static void searchForContact(ArrayList<String> lines, String contactPath) {
+        Path contacts = Paths.get(contactPath);
+        try {
+            lines = (ArrayList<String>) Files.readAllLines(contacts);
+            System.out.println(lines);
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Enter the name you would like to search: ");
+            String contactName = scan.nextLine();
 
-        System.out.println(lines);
-//        if (lines.indexOf(contactName) > 0){
-//            int nameIndex = lines.indexOf(contactName);
-//            lines.get(nameIndex);
-//
-//        }else {
-//            System.out.println("Name not found :/");
-//        }
-//        numbers.size(); // 3
-//        numbers.get(2); // 22
-//
-//        numbers.indexOf(20);    // 1
-//        numbers.indexOf("cat"); // -1
-
+            for(String d : lines){
+                if(d.toLowerCase().contains(contactName.toLowerCase())) {
+                    System.out.println(d);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    public static void deleteContact() {
+    public static void deleteContact(ArrayList<String> lines, String contactPath) {
+        Path contacts = Paths.get(contactPath);
 
     }
 
