@@ -147,13 +147,17 @@ public class ContactsManager {
             for(String d : lines){
                 if(d.toLowerCase().contains(oldContactName.toLowerCase())) {
                     System.out.println(d);
-                    lines.remove(d);
+                    int indexNum = lines.indexOf(d);
+                    System.out.println("index num " + indexNum);
+//                    System.out.println(lines.remove(d));
                 }
             }
 
             // Updating contacts.txt file.
-            Path filepath = Paths.get("src", "contacts.txt");
-            Files.write(filepath, lines);
+//            Path filepath = Paths.get("src", "contacts.txt");
+//            Files.write(filepath, lines);
+
+            System.out.println(lines);
 
             //  lines.add(newContact.getName() + " | " + newContact.getPhoneNumber());
 //            lines.remove(oldContactName + " | " + oldContact.getPhoneNumber())
